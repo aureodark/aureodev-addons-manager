@@ -1,0 +1,62 @@
+[
+    {
+        "slug": "login-personalizado",
+        "name": "Login Personalizado",
+        "description": "Customiza a tela de login do WordPress com logo, cores e CSS do cliente.",
+        "version": "1.2.0",
+        "type": "snippet",
+        "hook": "init",
+        "tags": ["pingo", "login", "css", "branding"],
+        "files": ["main.php", "style.css"],
+        "origin_site": "Pingo",
+        "created": "2025-03-10",
+        "updated": "2026-05-20",
+        "requires": [],
+        "changelog": "Refatorado para suportar logo por URL em vez de caminho fixo."
+    },
+    {
+        "slug": "header-fixo-elementor",
+        "name": "Header Fixo Elementor",
+        "description": "Torna o header do Elementor sticky com animação suave ao rolar.",
+        "version": "1.0.3",
+        "type": "snippet",
+        "hook": "wp_head",
+        "tags": ["elementor", "header", "css", "js"],
+        "files": ["main.php", "style.css", "script.js"],
+        "origin_site": "",
+        "created": "2025-07-01",
+        "updated": "2026-01-15",
+        "requires": ["elementor"],
+        "changelog": "Correção para compatibilidade com Elementor 3.2x."
+    },
+    {
+        "slug": "shortcode-mapa-google",
+        "name": "Shortcode: Mapa Google",
+        "description": "Adiciona [mapa_google lat=\"\" lng=\"\" zoom=\"\"] para embedar mapas sem plugin extra.",
+        "version": "2.0.0",
+        "type": "shortcode",
+        "hook": "init",
+        "tags": ["google-maps", "shortcode", "geral"],
+        "files": ["main.php"],
+        "origin_site": "",
+        "created": "2025-09-12",
+        "updated": "2026-03-01",
+        "requires": [],
+        "changelog": "Adicionado suporte a múltiplos marcadores."
+    },
+    {
+        "slug": "woocommerce-checkout-custom",
+        "name": "Checkout Personalizado WooCommerce",
+        "description": "Reorganiza campos do checkout e adiciona validações específicas para CNPJ.",
+        "version": "1.1.0",
+        "type": "plugin",
+        "hook": "plugins_loaded",
+        "tags": ["woocommerce", "checkout", "cnpj", "markdigital"],
+        "files": ["main.php", "style.css"],
+        "origin_site": "MarkDigital",
+        "created": "2026-01-20",
+        "updated": "2026-06-10",
+        "requires": ["woocommerce/woocommerce.php"],
+        "changelog": "Suporte a checkout em blocos do WooCommerce."
+    }
+]

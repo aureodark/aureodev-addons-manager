@@ -1,0 +1,14 @@
+{
+    "slug": "login-personalizado",
+    "name": "Login Personalizado",
+    "description": "Customiza a tela de login do WordPress com logo, cores e CSS do cliente.",
+    "version": "1.2.0",
+    "type": "snippet",
+    "hook": "init",
+    "tags": ["pingo", "login", "css", "branding"],
+    "files": ["main.php", "style.css"],
+    "origin_site": "Pingo",
+    "created": "2025-03-10",
+    "updated": "2026-05-20",
+    "requires": []
+}
