@@ -55,7 +55,9 @@ class Aureodev_Self_Updater {
         }
 
         if ( empty( $body ) ) {
-            return new WP_Error( 'no_releases', 'Nenhuma release encontrada no repositório do plugin.' );
+            // Repo existe mas não tem releases ainda — retornar array vazio (não é erro)
+            set_transient( $cache_key, array(), 5 * MINUTE_IN_SECONDS );
+            return array();
         }
 
         $releases = array();

@@ -378,10 +378,13 @@
         request( 'get_releases', {}, function ( d ) {
             $btn.prop( 'disabled', false ).text( 'Recarregar' );
             $loading.hide();
+            $result.hide();
 
             if ( ! d.releases || ! d.releases.length ) {
                 $result.removeClass( 'is-success is-error' ).addClass( 'is-error' )
-                       .text( 'Nenhuma release encontrada no repositório.' ).show();
+                       .html( '<strong>Nenhuma release encontrada.</strong> Crie a primeira release em: '
+                            + '<a href="https://github.com/' + escHtml( 'aureodark/aureodev-addons-manager' ) + '/releases/new" target="_blank" rel="noopener">GitHub → Releases → New Release</a>' )
+                       .show();
                 return;
             }
 
@@ -423,7 +426,8 @@
         }, function ( msg ) {
             $btn.prop( 'disabled', false ).text( 'Carregar Releases do GitHub' );
             $loading.hide();
-            $result.removeClass( 'is-success is-error' ).addClass( 'is-error' ).text( msg ).show();
+            $result.removeClass( 'is-success is-error' ).addClass( 'is-error' )
+                   .html( '<strong>Erro:</strong> ' + escHtml( msg ) ).show();
         } );
     } );
 
