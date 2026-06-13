@@ -26,6 +26,7 @@ class Aureodev_Core {
         require_once AUREODEV_PATH . 'includes/class-aureodev-runner.php';
         require_once AUREODEV_PATH . 'includes/class-aureodev-updater.php';
         require_once AUREODEV_PATH . 'includes/class-aureodev-debug.php';
+        require_once AUREODEV_PATH . 'includes/class-aureodev-self-updater.php';
 
         if ( is_admin() ) {
             require_once AUREODEV_PATH . 'admin/class-aureodev-admin.php';
@@ -41,6 +42,9 @@ class Aureodev_Core {
 
         // Admin notices para addons com erro
         add_action( 'admin_notices', array( $this, 'show_error_notices' ) );
+
+        // Integrar self-updater com o sistema de updates do WordPress
+        add_filter( 'pre_set_site_transient_update_plugins', array( 'Aureodev_Self_Updater', 'check_for_update' ) );
 
         if ( is_admin() ) {
             new Aureodev_Admin();

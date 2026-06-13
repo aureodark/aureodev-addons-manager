@@ -167,16 +167,17 @@ class Aureodev_Debug {
 
     public static function get_action_label( $action ) {
         $labels = array(
-            'install'    => 'Instalado',
-            'update'     => 'Atualizado',
-            'activate'   => 'Ativado',
-            'deactivate' => 'Desativado',
-            'edit'       => 'Editado',
-            'delete'     => 'Deletado',
-            'revert'     => 'Revertido',
-            'error'      => 'Erro',
-            'import'     => 'Importado',
-            'publish'    => 'Publicado no GitHub',
+            'install'     => 'Instalado',
+            'update'      => 'Atualizado',
+            'activate'    => 'Ativado',
+            'deactivate'  => 'Desativado',
+            'edit'        => 'Editado',
+            'delete'      => 'Deletado',
+            'revert'      => 'Revertido',
+            'error'       => 'Erro',
+            'import'      => 'Importado',
+            'publish'     => 'Publicado no GitHub',
+            'self_update' => 'Plugin atualizado',
         );
         return $labels[ $action ] ?? ucfirst( $action );
     }

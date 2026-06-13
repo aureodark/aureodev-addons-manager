@@ -10,6 +10,12 @@ settings_errors( 'aureodev' );
 
     <nav class="nav-tab-wrapper">
         <a href="<?php echo esc_url( admin_url( 'admin.php?page=aureodev-settings&tab=setup' ) ); ?>" class="nav-tab <?php echo $active_tab === 'setup' ? 'nav-tab-active' : ''; ?>">Configuração Inicial</a>
+        <a href="<?php echo esc_url( admin_url( 'admin.php?page=aureodev-settings&tab=plugin' ) ); ?>" class="nav-tab <?php echo $active_tab === 'plugin' ? 'nav-tab-active' : ''; ?>">
+            Atualizar Plugin
+            <?php if ( Aureodev_Self_Updater::has_update() ) : ?>
+            <span class="awaiting-mod">!</span>
+            <?php endif; ?>
+        </a>
         <a href="<?php echo esc_url( admin_url( 'admin.php?page=aureodev-settings&tab=advanced' ) ); ?>" class="nav-tab <?php echo $active_tab === 'advanced' ? 'nav-tab-active' : ''; ?>">Avançado</a>
     </nav>
 
@@ -102,6 +108,51 @@ settings_errors( 'aureodev' );
                 <input type="submit" name="aureodev_save_settings" class="button button-primary" value="Salvar">
             </p>
         </form>
+    </div>
+
+    <?php elseif ( $active_tab === 'plugin' ) : ?>
+
+    <div class="aureodev-card">
+        <h3>Versão Atual</h3>
+        <p>
+            <strong>aureodev Addons Manager</strong> &mdash; v<?php echo esc_html( AUREODEV_VERSION ); ?>
+            &nbsp;
+            <?php if ( Aureodev_Self_Updater::has_update() ) : ?>
+            <span class="aureodev-badge aureodev-badge-update">Nova versão disponível</span>
+            <?php else : ?>
+            <span class="aureodev-badge aureodev-badge-installed">Atualizado</span>
+            <?php endif; ?>
+        </p>
+        <p class="description">
+            Repositório: <a href="https://github.com/<?php echo esc_html( Aureodev_Self_Updater::PLUGIN_REPO ); ?>" target="_blank" rel="noopener"><?php echo esc_html( Aureodev_Self_Updater::PLUGIN_REPO ); ?></a>
+        </p>
+    </div>
+
+    <div class="aureodev-card">
+        <h3>Releases Disponíveis</h3>
+        <p class="description">Selecione qualquer versão para instalar &mdash; incluindo versões anteriores.</p>
+
+        <div id="aureodev-releases-wrap">
+            <button class="button" id="aureodev-load-releases">Carregar Releases do GitHub</button>
+            <span id="aureodev-releases-loading" style="display:none;margin-left:10px;">Carregando...</span>
+        </div>
+
+        <div id="aureodev-releases-list" style="display:none;margin-top:16px;">
+            <table class="wp-list-table widefat fixed striped aureodev-table">
+                <thead>
+                    <tr>
+                        <th style="width:100px;">Versão</th>
+                        <th style="width:120px;">Data</th>
+                        <th>Changelog</th>
+                        <th style="width:130px;">Ação</th>
+                    </tr>
+                </thead>
+                <tbody id="aureodev-releases-tbody">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="aureodev-release-result" class="aureodev-action-result" style="display:none;margin-top:12px;"></div>
     </div>
 
     <?php endif; ?>

@@ -365,4 +365,112 @@
         } );
     } );
 
+    // -------------------------------------------------------------------------
+    // Self-updater — Carregar e instalar releases
+    // -------------------------------------------------------------------------
+    $( '#aureodev-load-releases' ).on( 'click', function () {
+        const $btn      = $( this ).prop( 'disabled', true ).text( 'Carregando...' );
+        const $loading  = $( '#aureodev-releases-loading' ).show();
+        const $list     = $( '#aureodev-releases-list' );
+        const $tbody    = $( '#aureodev-releases-tbody' );
+        const $result   = $( '#aureodev-release-result' );
+
+        request( 'get_releases', {}, function ( d ) {
+            $btn.prop( 'disabled', false ).text( 'Recarregar' );
+            $loading.hide();
+
+            if ( ! d.releases || ! d.releases.length ) {
+                $result.removeClass( 'is-success is-error' ).addClass( 'is-error' )
+                       .text( 'Nenhuma release encontrada no repositório.' ).show();
+                return;
+            }
+
+            const currentVersion = aureodevData.pluginVersion || '';
+            $tbody.empty();
+
+            d.releases.forEach( function ( r ) {
+                const isCurrent  = currentVersion && ( 'v' + currentVersion === r.tag || currentVersion === r.tag );
+                const isNewer    = ! isCurrent && currentVersion && compareVersions( r.tag, currentVersion ) > 0;
+                const isOlder    = ! isCurrent && currentVersion && compareVersions( r.tag, currentVersion ) < 0;
+
+                const statusBadge = isCurrent
+                    ? '<span class="aureodev-badge aureodev-badge-installed">Atual</span>'
+                    : ( isNewer ? '<span class="aureodev-badge aureodev-badge-update">Mais recente</span>' : '' );
+
+                const changelog = r.body
+                    ? r.body.substring( 0, 120 ) + ( r.body.length > 120 ? '…' : '' )
+                    : '<span class="aureodev-muted">Sem changelog</span>';
+
+                const prereleaseBadge = r.prerelease ? ' <span class="aureodev-tag">pre-release</span>' : '';
+
+                const actionBtn = isCurrent
+                    ? '<span class="aureodev-muted">—</span>'
+                    : '<button class="button button-small aureodev-btn-install-release" data-tag="' + escAttr( r.tag ) + '">'
+                      + ( isNewer ? 'Atualizar' : 'Instalar' )
+                      + '</button>';
+
+                $tbody.append(
+                    '<tr class="' + ( isCurrent ? 'aureodev-row-active' : '' ) + '">'
+                    + '<td><strong>' + escHtml( r.tag ) + '</strong>' + prereleaseBadge + ' ' + statusBadge + '</td>'
+                    + '<td class="aureodev-muted">' + escHtml( r.published ? r.published.substring( 0, 10 ) : '' ) + '</td>'
+                    + '<td><small>' + changelog + '</small></td>'
+                    + '<td>' + actionBtn + '</td>'
+                    + '</tr>'
+                );
+            } );
+
+            $list.show();
+        }, function ( msg ) {
+            $btn.prop( 'disabled', false ).text( 'Carregar Releases do GitHub' );
+            $loading.hide();
+            $result.removeClass( 'is-success is-error' ).addClass( 'is-error' ).text( msg ).show();
+        } );
+    } );
+
+    $( document ).on( 'click', '.aureodev-btn-install-release', function () {
+        const tag    = $( this ).data( 'tag' );
+        const $btn   = $( this ).prop( 'disabled', true ).text( 'Instalando...' );
+        const $result = $( '#aureodev-release-result' );
+
+        if ( ! confirm( 'Instalar a versão ' + tag + '? O plugin será substituído e reativado automaticamente.' ) ) {
+            $btn.prop( 'disabled', false );
+            return;
+        }
+
+        request( 'install_release', { tag }, function ( d ) {
+            $result.removeClass( 'is-success is-error' ).addClass( 'is-success' )
+                   .text( d.message ).show();
+            setTimeout( function () { location.reload(); }, 2500 );
+        }, function ( msg ) {
+            $result.removeClass( 'is-success is-error' ).addClass( 'is-error' ).text( msg ).show();
+            $btn.prop( 'disabled', false ).text( 'Instalar' );
+        } );
+    } );
+
+    // Helpers de string
+    function escHtml( str ) {
+        return String( str )
+            .replace( /&/g, '&amp;' ).replace( /</g, '&lt;' )
+            .replace( />/g, '&gt;' ).replace( /"/g, '&quot;' );
+    }
+
+    function escAttr( str ) {
+        return String( str ).replace( /"/g, '&quot;' );
+    }
+
+    function compareVersions( a, b ) {
+        const normalize = function ( v ) {
+            return String( v ).replace( /^v/, '' ).split( '.' ).map( Number );
+        };
+        const pa = normalize( a );
+        const pb = normalize( b );
+        for ( let i = 0; i < Math.max( pa.length, pb.length ); i++ ) {
+            const na = pa[ i ] || 0;
+            const nb = pb[ i ] || 0;
+            if ( na > nb ) return 1;
+            if ( na < nb ) return -1;
+        }
+        return 0;
+    }
+
 } )( jQuery );

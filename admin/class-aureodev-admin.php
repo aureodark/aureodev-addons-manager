@@ -61,9 +61,10 @@ class Aureodev_Admin {
         );
 
         wp_localize_script( 'aureodev-admin', 'aureodevData', array(
-            'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-            'nonce'   => wp_create_nonce( 'aureodev_nonce' ),
-            'strings' => array(
+            'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+            'nonce'         => wp_create_nonce( 'aureodev_nonce' ),
+            'pluginVersion' => AUREODEV_VERSION,
+            'strings'       => array(
                 'confirm_activate'   => 'Ativar este addon?',
                 'confirm_deactivate' => 'Desativar este addon?',
                 'confirm_delete'     => 'Deletar permanentemente este addon e todos os seus arquivos? Esta ação não pode ser desfeita.',
@@ -289,6 +290,29 @@ class Aureodev_Admin {
                     wp_send_json_error( array( 'message' => $result->get_error_message() ) );
                 }
                 wp_send_json_success( array( 'message' => "Addon '{$slug}' importado com sucesso." ) );
+                break;
+
+            case 'get_releases':
+                $releases = Aureodev_Self_Updater::get_releases( true );
+                if ( is_wp_error( $releases ) ) {
+                    wp_send_json_error( array( 'message' => $releases->get_error_message() ) );
+                }
+                wp_send_json_success( array( 'releases' => $releases ) );
+                break;
+
+            case 'install_release':
+                $tag = sanitize_text_field( $_POST['tag'] ?? '' );
+                if ( ! $tag ) {
+                    wp_send_json_error( array( 'message' => 'Tag da release não informada.' ) );
+                }
+                $result = Aureodev_Self_Updater::install_release( $tag );
+                if ( is_wp_error( $result ) ) {
+                    wp_send_json_error( array( 'message' => $result->get_error_message() ) );
+                }
+                wp_send_json_success( array(
+                    'message'     => "Plugin atualizado para {$result['tag']} com sucesso. Recarregando...",
+                    'new_version' => $result['new_version'],
+                ) );
                 break;
 
             default:
