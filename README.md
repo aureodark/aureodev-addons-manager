@@ -341,7 +341,7 @@ Versões seguem `semver`: `MAJOR.MINOR.PATCH`.
 
 <div align="center">
 
-**Construído por [Aureo Fernandes](https://aureofernandes.com.br) — Wert Comunicação**
+**Construído por [Aureo Fernandes](https://aureofernandes.com.br) — @aureodark**
 
 *Desenvolvido com IA. Gerenciado com aureodev.*
 

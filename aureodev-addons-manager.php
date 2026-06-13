@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: aureodev Addons Manager
- * Plugin URI:  https://wertcomunicacao.com.br
+ * Plugin URI:  https://aureofernandes.com.br
  * Description: Gerenciador de snippets, plugins e shortcodes criados com IA. Conecta ao repositório GitHub privado para listar, instalar, versionar e executar addons com segurança.
  * Version:     1.0.0
  * Author:      Aureo Fernandes
- * Author URI:  https://wertcomunicacao.com.br
+ * Author URI:  https://aureofernandes.com.br
  * Text Domain: aureodev-addons
  * Requires PHP: 7.4
  * Requires at least: 6.0
